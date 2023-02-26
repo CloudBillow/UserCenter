@@ -1,0 +1,25 @@
+server:
+  port: 2235
+spring:
+  # MySQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_center?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  # Redis
+  redis:
+    host: localhost
+    port: 6379
+    database: 3
+  cache:
+    redis:
+      time-to-live: 3600
+
+
+redis-key:
+  user-center-key: UserCenter
+  user-center:
+    # 用户信息
+    user:
+      login: ${redis-key.user-center-key}:user:login:%s
