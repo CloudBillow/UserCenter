@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,6 +57,26 @@ public class UserServiceImpl implements UserService {
         redisUtils.set(String.format(userLoginKey, userId), loginUser);
 
         return JwtUtil.createToken(userId);
+
+    }
+
+    /**
+     * 用户登出
+     */
+    @Override
+    public void logout() {
+
+        // 获取SecurityContext中的用户ID
+        UsernamePasswordAuthenticationToken authentication =
+                (UsernamePasswordAuthenticationToken) SecurityContextHolder
+                        .getContext().getAuthentication();
+
+        LoginUserBO loginUser = (LoginUserBO) authentication.getPrincipal();
+
+        Integer userId = loginUser.getUser().getId();
+
+        // 删除Redis中的用户信息
+        redisUtils.delete(String.format(userLoginKey, userId));
 
     }
 }

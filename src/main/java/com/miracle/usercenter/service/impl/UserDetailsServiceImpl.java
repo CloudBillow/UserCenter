@@ -2,11 +2,9 @@ package com.miracle.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.miracle.usercenter.common.CODE;
-import com.miracle.usercenter.common.UserCenterException;
 import com.miracle.usercenter.mapper.UserMapper;
 import com.miracle.usercenter.pojo.bo.LoginUserBO;
 import com.miracle.usercenter.pojo.entity.User;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
- * 用户Service
+ * 用户详情Service
  *
  * @author XieYT
  * @since 2023/02/26 18:37

@@ -5,13 +5,10 @@ import com.miracle.usercenter.common.UserCenterException;
 import com.miracle.usercenter.pojo.bo.LoginUserBO;
 import com.miracle.usercenter.util.JwtUtil;
 import com.miracle.usercenter.util.RedisUtils;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,18 +53,31 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         // 解析token, 获取用户ID
-        Jws<Claims> claimsJws;
+        Jws<Claims> claimsJws = null;
+
+        CODE code = null;
         try {
             claimsJws = JwtUtil.parseToken(token);
-        } catch (UserCenterException e) {
-            handlerExceptionResolver.resolveException(request, response, null, e);
-            return;
+        } catch (ExpiredJwtException e) {
+            code = CODE.TOKEN_EXPIRED;
+        } catch (
+                MalformedJwtException |
+                IncorrectClaimException |
+                SignatureException e
+        ) {
+            code = CODE.TOKEN_INVALID;
         } catch (Exception e) {
             log.error("token解析失败", e);
+            code = CODE.TOKEN_ERROR;
+        }
+
+        // 如果有异常，则抛出异常
+        if (code != null) {
             handlerExceptionResolver.resolveException(request, response, null,
-                    new UserCenterException(CODE.TOKEN_ERROR));
+                    new UserCenterException(code));
             return;
         }
+
         String userId = claimsJws.getBody().getSubject();
 
         // 从Redis中获取用户信息
@@ -78,7 +88,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         // 将用户信息放入SecurityContext中
         if (Objects.isNull(loginUser)) {
-            throw new UserCenterException(CODE.TOKEN_ERROR);
+            // 如果没有查询到用户信息，则说明用户已经过期
+            handlerExceptionResolver.resolveException(request, response, null,
+                    new UserCenterException(CODE.USER_NOT_LOGIN));
+            return;
         }
 
         // 将用户信息放入SecurityContext中

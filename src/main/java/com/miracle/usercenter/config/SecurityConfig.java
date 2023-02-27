@@ -58,9 +58,11 @@ public class SecurityConfig {
                 .and()
                 // 允许使用请求匹配器进行访问限制
                 .authorizeRequests()
-                // 对pattern端点的请求进行认证
+                // 配置登录接口匿名访问（没有认证时可以访问，认证后不可以访问）
                 .antMatchers("/user/login").anonymous()
-                // 其他请求必须认证
+                // 配置hell测试接口任何人都可以访问（不管有没有认证都可以访问）
+                .antMatchers("/hello").permitAll()
+                // 配置其他请求必须认证
                 .anyRequest().authenticated();
 
         http

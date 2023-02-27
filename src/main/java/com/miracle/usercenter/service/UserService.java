@@ -17,4 +17,9 @@ public interface UserService {
      * @return token
      */
     String login(UserDTO userDTO);
+
+    /**
+     * 用户登出
+     */
+    void logout();
 }

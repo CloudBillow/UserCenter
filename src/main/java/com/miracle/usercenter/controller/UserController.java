@@ -20,14 +20,21 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    /**
+     * 登录
+     */
     @PostMapping("/login")
     public Result<String> hello(@RequestBody UserDTO user) {
         String token = userService.login(user);
         return Result.success(token);
     }
 
-    @GetMapping("/hello")
-    public Result<String> hello() {
-        return Result.success("hello");
+    /**
+     * 登出
+     */
+    @GetMapping("/logout")
+    public Result<String> logout() {
+        userService.logout();
+        return Result.success("注销成功");
     }
 }

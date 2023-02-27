@@ -1,7 +1,5 @@
 package com.miracle.usercenter.util;
 
-import com.miracle.usercenter.common.CODE;
-import com.miracle.usercenter.common.UserCenterException;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
@@ -18,6 +16,7 @@ import java.util.Map;
  *
  * @author Miracle
  */
+@SuppressWarnings("unused")
 @Slf4j
 public class JwtUtil {
     /**
@@ -126,20 +125,7 @@ public class JwtUtil {
         // 移除 token 前的"XXX#"字符串
         token = StringUtils.substringAfter(token, JWT_SEPARATOR);
         // 解析 token 字符串
-        Jws<Claims> claimsJws;
-        try {
-            claimsJws = Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
-        } catch (ExpiredJwtException e) {
-            throw new UserCenterException(CODE.TOKEN_EXPIRED);
-        } catch (MalformedJwtException e) {
-            throw new UserCenterException(CODE.TOKEN_ERROR);
-        } catch (IncorrectClaimException e) {
-            throw new UserCenterException(CODE.TOKEN_INVALID);
-        } catch (Exception e) {
-            log.error("token解析失败", e);
-            throw new UserCenterException(CODE.TOKEN_ERROR);
-        }
-        return claimsJws;
+        return Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
     }
 
     /**
