@@ -1,6 +1,9 @@
 package com.miracle.usercenter.util;
 
+import com.miracle.usercenter.common.CODE;
+import com.miracle.usercenter.common.UserCenterException;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -15,11 +18,12 @@ import java.util.Map;
  *
  * @author Miracle
  */
+@Slf4j
 public class JwtUtil {
     /**
      * Token过期时间必须大于生效时间
      */
-    private static final Long TOKEN_EXPIRE_TIME = 60 * 3 * 1000L;
+    private static final Long TOKEN_EXPIRE_TIME = 60 * 30 * 1000L;
     /**
      * Token加密解密的密码
      */
@@ -122,7 +126,20 @@ public class JwtUtil {
         // 移除 token 前的"XXX#"字符串
         token = StringUtils.substringAfter(token, JWT_SEPARATOR);
         // 解析 token 字符串
-        return Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
+        Jws<Claims> claimsJws;
+        try {
+            claimsJws = Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            throw new UserCenterException(CODE.TOKEN_EXPIRED);
+        } catch (MalformedJwtException e) {
+            throw new UserCenterException(CODE.TOKEN_ERROR);
+        } catch (IncorrectClaimException e) {
+            throw new UserCenterException(CODE.TOKEN_INVALID);
+        } catch (Exception e) {
+            log.error("token解析失败", e);
+            throw new UserCenterException(CODE.TOKEN_ERROR);
+        }
+        return claimsJws;
     }
 
     /**

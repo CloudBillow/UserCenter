@@ -33,19 +33,33 @@ public enum CODE {
      */
     PARAMETER_EXCEPTION(501, "请求参数校验异常"),
 
+    /* ==================== Token ==================== */
+    /**
+     * Token过期
+     */
+    TOKEN_EXPIRED(10001, "Token过期"),
+    /**
+     * Token错误
+     */
+    TOKEN_ERROR(10002, "Token错误"),
+    /**
+     * Token无效
+     */
+    TOKEN_INVALID(10003, "Token无效"),
+
     /* ==================== 用户 ==================== */
     /**
      * 用户名或密码错误
      */
-    USERNAME_OR_PASSWORD_ERROR(10001, "用户名或密码错误"),
+    USERNAME_OR_PASSWORD_ERROR(20001, "用户名或密码错误"),
     /**
      * 用户未登录
      */
-    USER_NOT_LOGIN(10002, "用户未登录"),
+    USER_NOT_LOGIN(20002, "未登录"),
     /**
-     * Token错误
+     * 无权限
      */
-    TOKEN_ERROR(10003, "token错误"),
+    NO_PERMISSION(20003, "无权限"),
 
     ;
 

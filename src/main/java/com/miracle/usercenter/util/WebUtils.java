@@ -1,5 +1,7 @@
 package com.miracle.usercenter.util;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author XieYT
  * @since 2023/02/26 18:02
  */
+@Slf4j
 public class WebUtils {
 
     /**
@@ -24,7 +27,7 @@ public class WebUtils {
             response.setCharacterEncoding("utf-8");
             response.getWriter().print(string);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("renderString异常", e);
         }
     }
 }

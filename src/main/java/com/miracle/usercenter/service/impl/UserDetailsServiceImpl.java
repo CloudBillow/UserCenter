@@ -6,6 +6,7 @@ import com.miracle.usercenter.common.UserCenterException;
 import com.miracle.usercenter.mapper.UserMapper;
 import com.miracle.usercenter.pojo.bo.LoginUserBO;
 import com.miracle.usercenter.pojo.entity.User;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 如果没有查询到用户就抛出异常
         if (Objects.isNull(user)) {
-            throw new UserCenterException(CODE.USERNAME_OR_PASSWORD_ERROR);
+            throw new UsernameNotFoundException(CODE.USERNAME_OR_PASSWORD_ERROR.getMessage());
         }
 
         // TODO 查询用户权限信息

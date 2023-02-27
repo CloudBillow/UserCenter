@@ -3,11 +3,16 @@ package com.miracle.usercenter.handler;
 import com.miracle.usercenter.common.CODE;
 import com.miracle.usercenter.common.Result;
 import com.miracle.usercenter.common.UserCenterException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     /**
@@ -27,11 +32,19 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * 用户无权限
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public Result<?> accessDeniedException() {
+        return Result.fail(CODE.NO_PERMISSION);
+    }
+
+    /**
      * 全局异常
      */
     @ExceptionHandler(Exception.class)
-    public Result<?> exception(Exception e) {
-        e.printStackTrace();
+    public Result<?> exception(Exception e, HttpServletRequest request) {
+        log.error("接口{}异常", request.getRequestURI(), e);
         return Result.fail(CODE.FAIL);
     }
 }

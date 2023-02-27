@@ -8,8 +8,10 @@ import com.miracle.usercenter.util.RedisUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +34,7 @@ import java.util.Objects;
  * @since 2023/02/26 22:51
  */
 @Component
+@Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private RedisUtils redisUtils;
@@ -56,12 +59,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         Jws<Claims> claimsJws;
         try {
             claimsJws = JwtUtil.parseToken(token);
-        } catch (ExpiredJwtException e) {
-            handlerExceptionResolver.resolveException(request, response, null,
-                    new UserCenterException(CODE.USER_NOT_LOGIN));
+        } catch (UserCenterException e) {
+            handlerExceptionResolver.resolveException(request, response, null, e);
             return;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("token解析失败", e);
             handlerExceptionResolver.resolveException(request, response, null,
                     new UserCenterException(CODE.TOKEN_ERROR));
             return;
@@ -73,8 +75,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 String.format(userLoginKey, userId),
                 LoginUserBO.class
         );
-
-        System.out.println("loginUser = " + loginUser);
 
         // 将用户信息放入SecurityContext中
         if (Objects.isNull(loginUser)) {
