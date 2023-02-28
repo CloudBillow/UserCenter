@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,6 +28,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private UserMapper userMapper;
 
+    /**
+     * 根据用户名定位用户。
+     *
+     * @param username 用户名
+     * @return 用户信息
+     * @throws UsernameNotFoundException 用户名未找到
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -40,7 +50,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         // TODO 查询用户权限信息
+        List<String> permissions = new ArrayList<>(
+                Arrays.asList("test", "admin")
+        );
 
-        return LoginUserBO.builder().user(user).build();
+        return LoginUserBO.builder()
+                .user(user)
+                .permissions(permissions)
+                .build();
     }
 }

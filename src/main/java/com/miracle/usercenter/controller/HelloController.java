@@ -1,6 +1,7 @@
 package com.miracle.usercenter.controller;
 
 import com.miracle.usercenter.common.Result;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @RequestMapping("/hello")
+    @PreAuthorize("hasAuthority('admin1')")
     public Result<String> hello() {
         return Result.success("hello");
     }

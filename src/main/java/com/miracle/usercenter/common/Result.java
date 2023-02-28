@@ -1,12 +1,5 @@
 package com.miracle.usercenter.common;
 
-/**
- * TODO
- *
- * @author XieYT
- * @since 2023/02/26 17:47
- */
-
 import lombok.Data;
 
 /**
