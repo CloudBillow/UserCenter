@@ -2,6 +2,7 @@ package com.miracle.usercenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.miracle.usercenter.common.CODE;
+import com.miracle.usercenter.mapper.PermissionMapper;
 import com.miracle.usercenter.mapper.UserMapper;
 import com.miracle.usercenter.pojo.bo.LoginUserBO;
 import com.miracle.usercenter.pojo.entity.User;
@@ -11,8 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private PermissionMapper permissionMapper;
 
     /**
      * 根据用户名定位用户。
@@ -49,10 +50,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException(CODE.USERNAME_OR_PASSWORD_ERROR.getMessage());
         }
 
-        // TODO 查询用户权限信息
-        List<String> permissions = new ArrayList<>(
-                Arrays.asList("test", "admin")
-        );
+        // 查询用户权限信息
+        List<String> permissions = permissionMapper.selectKeyListByUserId(user.getId());
 
         return LoginUserBO.builder()
                 .user(user)

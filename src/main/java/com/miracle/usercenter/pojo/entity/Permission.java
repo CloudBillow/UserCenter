@@ -9,51 +9,65 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 用户表实体类
+ * 权限实体类
  *
  * @author XieYT
- * @since 2023/02/26 18:25
+ * @since 2023/02/28 22:40
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("user")
-public class User implements Serializable {
-
+@TableName("permission")
+public class Permission implements Serializable {
     /**
-     * 用户ID
+     * 主键
      */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 账户
+     * 权限名称
      */
-    private String username;
+    private String name;
 
     /**
-     * 密码
+     * 路由地址
      */
-    private String password;
+    private String path;
 
     /**
-     * 用户昵称
+     * 组件路径
      */
-    private String nickname;
+    private String component;
 
     /**
-     * 邮箱
+     * 菜单可见性
      */
-    private String email;
+    private Boolean visible;
 
     /**
-     * 电话
+     * 权限标识
      */
-    private String phone;
+    private String key;
 
     /**
-     * 创建人用户ID
+     * 图标
+     */
+    private String icon;
+
+    /**
+     * 权限类型
+     */
+    private Integer type;
+
+    /**
+     * 权限排序
+     */
+    private Integer sort;
+
+    /**
+     * 创建人ID
      */
     private Integer createBy;
 
@@ -64,7 +78,7 @@ public class User implements Serializable {
     private Integer createTime;
 
     /**
-     * 更新人
+     * 更新人ID
      */
     private Integer updateBy;
 
@@ -80,24 +94,14 @@ public class User implements Serializable {
     private Boolean status;
 
     /**
-     * 性别（0男、1女、2未知）
-     */
-    private String sex;
-
-    /**
-     * 头像
-     */
-    private String avatar;
-
-    /**
-     * 是否是超级管理员
-     */
-    private Boolean isSuper;
-
-    /**
-     * 是否已经删除
+     * 删除标识
      */
     private Boolean delFlag;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     private static final long serialVersionUID = 1L;
 }

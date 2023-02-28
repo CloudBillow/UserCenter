@@ -1,7 +1,8 @@
 package com.miracle.usercenter;
 
-import com.miracle.usercenter.pojo.entity.User;
+import com.miracle.usercenter.mapper.PermissionMapper;
 import com.miracle.usercenter.mapper.UserMapper;
+import com.miracle.usercenter.pojo.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -19,6 +20,8 @@ public class MapperTest {
 
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private PermissionMapper permissionMapper;
 
     @Test
     public void testUserMapperSelectList() {
@@ -34,4 +37,9 @@ public class MapperTest {
         userMapper.insert(user);
     }
 
+    @Test
+    public void testSelectKeyListByUserId() {
+        List<String> permissionKeys = permissionMapper.selectKeyListByUserId(1);
+        System.out.println(permissionKeys);
+    }
 }
