@@ -17,15 +17,15 @@ public class WebUtils {
      * 将字符串渲染到页面
      *
      * @param response response
-     * @param string   字符串
+     * @param body     响应体
      */
-    public static void renderString(HttpServletResponse response, String string) {
+    public static void renderString(HttpServletResponse response, String body) {
         try {
             response.reset();
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().print(string);
+            response.getWriter().print(body);
         } catch (Exception e) {
             log.error("renderString异常", e);
         }

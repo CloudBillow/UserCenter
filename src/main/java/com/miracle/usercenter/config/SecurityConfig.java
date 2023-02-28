@@ -1,6 +1,8 @@
 package com.miracle.usercenter.config;
 
 import com.miracle.usercenter.filter.JwtAuthenticationTokenFilter;
+import com.miracle.usercenter.handler.AccessDeniedHandlerImpl;
+import com.miracle.usercenter.handler.AuthenticationEntryPointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +27,10 @@ public class SecurityConfig {
 
     @Resource
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Resource
+    private AccessDeniedHandlerImpl accessDeniedHandler;
+    @Resource
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
 
 
     /**
@@ -71,6 +77,11 @@ public class SecurityConfig {
                         jwtAuthenticationTokenFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
+
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPoint);
 
         return http.build();
 
