@@ -32,6 +32,11 @@ public class Role implements Serializable {
     private String name;
 
     /**
+     * 角色Key
+     */
+    private String key;
+
+    /**
      * 状态
      */
     private Boolean status;

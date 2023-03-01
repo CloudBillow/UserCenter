@@ -57,25 +57,31 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 如果请求头中有Refresh-Token，则进行刷新Token的操作
         if (StringUtils.isNotBlank(refreshToken)) {
 
-
-            // 验证accessToken和refreshToken是否是同一个用户
-            boolean isCheck;
+            // accessToken中获取用户ID
+            String accessId;
+            // refreshToken中获取用户ID
+            String refreshId;
 
             try {
-                isCheck = Objects.equals(
-                        JwtUtil.parseToken(accessToken).getBody().getSubject(),
-                        JwtUtil.parseToken(refreshToken).getBody().getSubject()
-                );
-            } catch (Exception e) {
+                accessId = JwtUtil.parseToken(accessToken).getBody().getSubject();
+            } catch (ExpiredJwtException e) {
+                accessId = e.getClaims().getSubject();
+            }
+
+            try {
+                refreshId = JwtUtil.parseToken(accessToken).getBody().getSubject();
+            } catch (ExpiredJwtException e) {
                 handlerExceptionResolver.resolveException(request, response, null,
                         new UserCenterException(CODE.USER_NOT_LOGIN));
                 return;
             }
 
-            if (!JwtUtil.isTokenExpired(refreshToken) && isCheck) {
+            // 如果两个Token不属于同一个用户，则退出登录
+            if (Objects.equals(accessId, refreshId)) {
                 filterChain.doFilter(request, response);
                 return;
             }
+
             // 如果Refresh-Token已经过期，则退出登录
             handlerExceptionResolver.resolveException(request, response, null,
                     new UserCenterException(CODE.USER_NOT_LOGIN));

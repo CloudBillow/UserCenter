@@ -22,8 +22,8 @@ public class JwtUtil {
     /**
      * Token过期时间必须大于生效时间
      */
-    private static final Long TOKEN_EXPIRE_TIME = 30 * 1 * 1000L;
-    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 60 * 1 * 1000L;
+    private static final Long TOKEN_EXPIRE_TIME = 60 * 1 * 1000L;
+    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 60 * 5 * 1000L;
     /**
      * Token加密解密的密码
      */
@@ -126,7 +126,7 @@ public class JwtUtil {
         // 移除 token 前的"XXX#"字符串
         token = StringUtils.substringAfter(token, JWT_SEPARATOR);
         // 解析 token 字符串
-        return Jwts.parser().setSigningKey(generateKey()).setAllowedClockSkewSeconds(10).parseClaimsJws(token);
+        return Jwts.parser().setSigningKey(generateKey()).parseClaimsJws(token);
     }
 
     /**
@@ -158,7 +158,7 @@ public class JwtUtil {
      */
     public static Boolean isTokenExpired(String token) {
         try {
-            return parseToken(token).getBody().getExpiration().before(new Date(System.currentTimeMillis() - 3000));
+            return parseToken(token).getBody().getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
             return true;
         }
