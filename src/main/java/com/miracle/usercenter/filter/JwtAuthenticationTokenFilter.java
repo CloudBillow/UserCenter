@@ -42,13 +42,50 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 获取请求头中的Refresh-Token
+        String refreshToken = request.getHeader("Refresh-Token");
 
-        // 获取请求头中的token
-        String token = request.getHeader("token");
+        // 获取请求头中的Access-Token
+        String accessToken = request.getHeader("Access-Token");
 
         // 如果请求头中没有token，则return，继续执行下一个过滤器
-        if (StringUtils.isEmpty(token)) {
+        if (StringUtils.isEmpty(accessToken)) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 如果请求头中有Refresh-Token，则进行刷新Token的操作
+        if (StringUtils.isNotBlank(refreshToken)) {
+
+
+            // 验证accessToken和refreshToken是否是同一个用户
+            boolean isCheck;
+
+            try {
+                isCheck = Objects.equals(
+                        JwtUtil.parseToken(accessToken).getBody().getSubject(),
+                        JwtUtil.parseToken(refreshToken).getBody().getSubject()
+                );
+            } catch (Exception e) {
+                handlerExceptionResolver.resolveException(request, response, null,
+                        new UserCenterException(CODE.USER_NOT_LOGIN));
+                return;
+            }
+
+            if (!JwtUtil.isTokenExpired(refreshToken) && isCheck) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            // 如果Refresh-Token已经过期，则退出登录
+            handlerExceptionResolver.resolveException(request, response, null,
+                    new UserCenterException(CODE.USER_NOT_LOGIN));
+            return;
+        }
+
+        // 如果请求头中没有Refresh-Token，则进行登录授权的操作
+        if (JwtUtil.isTokenExpired(accessToken)) {
+            handlerExceptionResolver.resolveException(request, response, null,
+                    new UserCenterException(CODE.TOKEN_EXPIRED));
             return;
         }
 
@@ -57,7 +94,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         CODE code = null;
         try {
-            claimsJws = JwtUtil.parseToken(token);
+            claimsJws = JwtUtil.parseToken(accessToken);
         } catch (ExpiredJwtException e) {
             code = CODE.TOKEN_EXPIRED;
         } catch (
@@ -104,6 +141,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
+
 
     }
 }

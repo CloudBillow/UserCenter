@@ -25,7 +25,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        log.info("用户未登录:{}", authException.getMessage());
+        log.info("AuthenticationEntryPoint:{}", authException.getMessage());
         ObjectMapper objectMapper = new ObjectMapper();
         Result<String> result = Result.fail(
                 CODE.USER_NOT_LOGIN.getCode(),

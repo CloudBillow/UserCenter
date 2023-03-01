@@ -6,7 +6,6 @@ import com.miracle.usercenter.mapper.PermissionMapper;
 import com.miracle.usercenter.mapper.UserMapper;
 import com.miracle.usercenter.pojo.bo.LoginUserBO;
 import com.miracle.usercenter.pojo.entity.User;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 如果没有查询到用户就抛出异常
         if (Objects.isNull(user)) {
-            throw new AccessDeniedException(CODE.USERNAME_OR_PASSWORD_ERROR.getMessage());
+            throw new UsernameNotFoundException(CODE.USERNAME_OR_PASSWORD_ERROR.getMessage());
         }
 
         // 查询用户权限信息

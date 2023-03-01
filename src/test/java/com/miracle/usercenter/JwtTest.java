@@ -29,4 +29,12 @@ public class JwtTest {
         Jws<Claims> claimsJws = JwtUtil.parseToken(token);
         System.out.println("claimsJws = " + claimsJws);
     }
+
+    @Test
+    public void testExp() {
+        String token = "MIRACLE#eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsb2dpbiIsIm5iZiI6MTY3NzY2MDI4OCwiZXhwIjoxNjc3NjYwMzE4LCJ1c2VySWQiOjEyMywiaWF0IjoxNjc3NjYwMjg4LCJqdGkiOiJXZWQgTWFyIDAxIDE2OjQ0OjQ4IENTVCAyMDIzIiwidXNlcm5hbWUiOiJ0ZXN0In0.Y5fdxngS8fq9B-ujF_BemMGxbHPMq5QM-DkQgfQJnZY";
+        Boolean tokenExpired = JwtUtil.checkToken(token);
+
+        System.out.println("tokenExpired = " + tokenExpired);
+    }
 }

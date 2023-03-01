@@ -12,7 +12,6 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        System.out.println("start insert fill ....");
         int createTime = TimeUtils.tenBitTimestamp();
         this.strictInsertFill(metaObject, "createTime", Integer.class, createTime);
         this.strictInsertFill(metaObject, "updateTime", Integer.class, createTime);
@@ -20,7 +19,6 @@ public class MyBatisPlusConfig implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        System.out.println("start update fill ....");
         this.strictInsertFill(metaObject, "updateTime", Integer.class, TimeUtils.tenBitTimestamp());
     }
 }

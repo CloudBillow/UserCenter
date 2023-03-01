@@ -22,12 +22,14 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException {
-        log.info("用户无权限:{}", accessDeniedException.getMessage());
+        log.info("AccessDeniedHandle:{}", accessDeniedException.getMessage());
         ObjectMapper objectMapper = new ObjectMapper();
         Result<String> result = Result.fail(CODE.NO_PERMISSION);
         WebUtils.renderString(response, objectMapper.writeValueAsString(result));
     }
+
 }
