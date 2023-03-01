@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.miracle.usercenter.util.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 @Slf4j
 public class MyBatisPlusConfig implements MetaObjectHandler {
 

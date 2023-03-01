@@ -79,9 +79,14 @@ public class SecurityConfig {
                 );
 
         http
+                // 异常处理
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(authenticationEntryPoint);
+
+        http
+                // 允许跨域
+                .cors();
 
         return http.build();
 
