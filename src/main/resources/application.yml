@@ -16,10 +16,15 @@ spring:
     redis:
       time-to-live: 3600
 
-
+# Redis Key
 redis-key:
   user-center-key: UserCenter
   user-center:
     # 用户信息
     user:
       login: ${redis-key.user-center-key}:user:login:%s
+
+# 用户中心相关配置
+user-center:
+  default-role-id: 2
+  default-avatar: '#'

@@ -35,7 +35,7 @@ public class JwtUtil {
     /**
      * 添加一个前缀
      */
-    private static final String JWT_SEPARATOR = "MIRACLE#";
+    private static final String JWT_SEPARATOR = "Bearer ";
     /**
      * token生效时间(默认是从当前开始生效)
      * 默认：new Date(System.currentTimeMillis() + START_TIME)

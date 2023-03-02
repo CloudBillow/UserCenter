@@ -27,4 +27,9 @@ public class UserDTO {
      */
     private String password;
 
+    /**
+     * 邮箱
+     */
+    private String email;
+
 }

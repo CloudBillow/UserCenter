@@ -49,6 +49,20 @@ public class Result<T> {
     }
 
     /**
+     * 成功（返回数据和自定义消息）
+     *
+     * @param <T> 泛型
+     * @return {@link Result}
+     */
+    public static <T> Result<T> success(T data, String message) {
+        Result<T> result = new Result<>();
+        result.setResultCode(CODE.SUCCESS);
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
+    /**
      * 成功（返回数据）
      *
      * @param <T> 泛型
