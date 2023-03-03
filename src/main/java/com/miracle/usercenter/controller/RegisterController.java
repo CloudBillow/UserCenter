@@ -27,7 +27,7 @@ public class RegisterController {
     /**
      * 用户名密码注册
      */
-    @PostMapping("/register")
+    @PostMapping("/account")
     public Result<TokenVO> register(@RequestBody UserDTO user) {
         TokenVO token = registerService.registerByUsernameAndPassword(user);
         return Result.success(token, "注册成功");

@@ -52,4 +52,9 @@
           and p.status = 1
     </select>
 
+    <select id="selectKeyList" resultType="String">
+        select distinct `key`
+        from user_center.permission
+        where status = 1
+    </select>
 </mapper>

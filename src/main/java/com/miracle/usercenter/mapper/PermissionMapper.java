@@ -21,4 +21,11 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      * @return 权限标识列表
      */
     List<String> selectKeyListByUserId(@Param("userId") Integer userId);
+
+    /**
+     * 查询所有权限标识
+     *
+     * @return 权限标识列表
+     */
+    List<String> selectKeyList();
 }

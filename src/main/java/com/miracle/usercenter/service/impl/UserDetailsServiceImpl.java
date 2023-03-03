@@ -51,7 +51,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         // 查询用户权限信息
-        List<String> permissions = permissionMapper.selectKeyListByUserId(user.getId());
+        List<String> permissions;
+        if (user.getIsSuper()) {
+            // 超级管理员拥有所有权限
+            permissions = permissionMapper.selectKeyList();
+        } else {
+            // 普通用户查询权限
+            permissions = permissionMapper.selectKeyListByUserId(user.getId());
+        }
+
 
         return LoginUserBO.builder()
                 .user(user)

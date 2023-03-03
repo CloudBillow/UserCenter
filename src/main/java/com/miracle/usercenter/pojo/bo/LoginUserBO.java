@@ -72,7 +72,7 @@ public class LoginUserBO implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.getStatus();
     }
 
     @Override
@@ -82,6 +82,6 @@ public class LoginUserBO implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getDelFlag();
     }
 }

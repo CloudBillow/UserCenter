@@ -41,7 +41,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         // 获取请求头中的Refresh-Token
         String refreshToken = request.getHeader("Refresh-Token");
 
@@ -88,18 +89,13 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 如果请求头中没有Refresh-Token，则进行登录授权的操作
-        if (JwtUtil.isTokenExpired(accessToken)) {
-            handlerExceptionResolver.resolveException(request, response, null,
-                    new UserCenterException(CODE.TOKEN_EXPIRED));
-            return;
-        }
 
-        // 解析token, 获取用户ID
+        // 如果请求头中没有Refresh-Token，则进行登录授权的操作
         Jws<Claims> claimsJws = null;
 
         CODE code = null;
         try {
+            // 解析token, 获取用户ID
             claimsJws = JwtUtil.parseToken(accessToken);
         } catch (ExpiredJwtException e) {
             code = CODE.TOKEN_EXPIRED;
@@ -131,7 +127,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         // 将用户信息放入SecurityContext中
         if (Objects.isNull(loginUser)) {
-            // 如果没有查询到用户信息，则说明用户已经过期
+            // 如果没有查询到用户信息，则说明用户未登录
             handlerExceptionResolver.resolveException(request, response, null,
                     new UserCenterException(CODE.USER_NOT_LOGIN));
             return;
