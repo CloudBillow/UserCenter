@@ -6,7 +6,6 @@
         <!--@Table user_center.`role`-->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="key" jdbcType="VARCHAR" property="key"/>
         <result column="status" jdbcType="BIT" property="status"/>
         <result column="create_time" jdbcType="INTEGER" property="createTime"/>
         <result column="update_time" jdbcType="INTEGER" property="updateTime"/>
@@ -15,7 +14,6 @@
         <!--@mbg.generated-->
         id,
         `name`,
-        `key`,
         `status`,
         create_time,
         update_time
