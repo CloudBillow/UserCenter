@@ -11,6 +11,7 @@ import com.miracle.usercenter.pojo.entity.UserRole;
 import com.miracle.usercenter.pojo.vo.TokenVO;
 import com.miracle.usercenter.service.RegisterService;
 import com.miracle.usercenter.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +26,7 @@ import javax.annotation.Resource;
  * @since 2023/03/02 22:40
  */
 @Service
+@Slf4j
 public class RegisterServiceImpl implements RegisterService {
 
     @Resource

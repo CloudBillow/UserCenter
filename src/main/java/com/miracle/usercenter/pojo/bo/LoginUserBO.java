@@ -82,6 +82,6 @@ public class LoginUserBO implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getDelFlag();
+        return !user.getDelFlag();
     }
 }
